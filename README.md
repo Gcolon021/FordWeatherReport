@@ -16,8 +16,3 @@ Languages/Libraries:
 - [Moshi](https://github.com/square/moshi/)
 - [Okhttp](https://square.github.io/okhttp/)
 - [Apache Commons](https://commons.apache.org/)
-
-Technologies:
-- [Intellij Idea](https://www.jetbrains.com/idea/)
-- [Launch4j](http://launch4j.sourceforge.net/)
-- [Inno Setup](https://jrsoftware.org/isinfo.php)
