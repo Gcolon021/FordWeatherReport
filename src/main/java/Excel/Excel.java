@@ -152,7 +152,7 @@ public class Excel {
                 createCell(
                         row,
                         8,
-                        fordDealer.getWeather().getPrecipitationAccumulation().getValue().toString(),
+                        fordDealer.getWeather().getPrecipitationAccumulation().getValue()+"",
                         cellStyle
                 );
             } else {

@@ -16,8 +16,13 @@ Languages/Libraries:
 - [Moshi](https://github.com/square/moshi/)
 - [Okhttp](https://square.github.io/okhttp/)
 - [Apache Commons](https://commons.apache.org/)
+- [Lombok](https://projectlombok.org/)
 
-Technologies:
-- [Intellij Idea](https://www.jetbrains.com/idea/)
-- [Launch4j](http://launch4j.sourceforge.net/)
-- [Inno Setup](https://jrsoftware.org/isinfo.php)
+Pre-Code Review Notes:
+ - Use Lombok Library for handling getters, setters, equals, hashcode. 
+ - Use web address for resource files. Potentially a shared google drive file or something similar.
+ - When utilizing git use git-flow or some better approach to using version control.
+ - Use CSV library instead of writing a regular expression to parse data. "My friend had a problem, so he fixed it with a regular expression. Now my friend has two problems." - some wise program
+ 
+ Lines of Java Code: 1311
+ 

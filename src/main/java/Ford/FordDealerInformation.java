@@ -11,6 +11,7 @@ public class FordDealerInformation {
     Both of these files are never written and for this reason they will remain as resource only files.
      */
 
+    // FordDealer --> expose at endpoint somewhere so we can get data outside of jar and modify if nessecary
     private final static InputStream fordDealershipInformation = FordDealerInformation.class.getClassLoader().getResourceAsStream("DealerInformation.csv");
     private final static URL fordDealerLocationInformation = FordDealerInformation.class.getClassLoader().getResource("Hartford CMT Routing V 49.csv");
 
@@ -24,19 +25,26 @@ public class FordDealerInformation {
             String line;
             while ((line = br.readLine()) != null) {
                 String[] split = line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);
-                fordDealers.add(new FordDealer(
-                        split[0],
-                        split[1],
-                        split[2],
-                        split[3],
-                        split[4],
-                        split[5],
-                        split[6],
-                        split[7] // ZipCode
-                ));
+
+                FordDealer build = FordDealer.builder()
+                        .route(split[0])
+                        .dealerCode(split[1])
+                        .name(split[2])
+                        .city(split[3])
+                        .stateCode(split[4])
+                        .actualTime(split[5])
+                        .expectedTime(split[6])
+                        .zipCode(split[7])
+                        .build();
+
+                fordDealers.add(build);
+
             }
         } catch (IOException e) {
+
+            // Do something more graceful here like return an empty arraylist === Fail gracefully
             e.printStackTrace();
+
         }
         return fordDealers;
     }
