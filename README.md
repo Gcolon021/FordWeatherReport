@@ -18,11 +18,13 @@ Languages/Libraries:
 - [Apache Commons](https://commons.apache.org/)
 - [Lombok](https://projectlombok.org/)
 
-Pre-Code Review Notes:
+### Pre-Code Review Notes:
  - Use Lombok Library for handling getters, setters, equals, hashcode. 
  - Use web address for resource files. Potentially a shared google drive file or something similar.
  - When utilizing git use git-flow or some better approach to using version control.
  - Use CSV library instead of writing a regular expression to parse data. "My friend had a problem, so he fixed it with a regular expression. Now my friend has two problems." - some wise program
+ - This project had 1311 lines of java code pre-refactor
  
- Lines of Java Code: 1311
- 
+### Refactor - Post Code Review:
+ - Migrated project to use @Data and @Builder reducing clutter and lines of code by 329. The biggest benefit of this change is reduce clutter and improve readability making future maintenance easier.
+- 
