@@ -26,10 +26,11 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.3.1'
     testImplementation 'org.hamcrest:hamcrest:2.2'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.3.1'
-
-    // Lombok imports
+    // https://projectlombok.org/features/all
     compileOnly 'org.projectlombok:lombok:1.18.12'
     annotationProcessor 'org.projectlombok:lombok:1.18.12'
+    // https://commons.apache.org/proper/commons-csv/
+    compile group: 'org.apache.commons', name: 'commons-csv', version: '1.8'
 }
 
 test {

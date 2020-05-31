@@ -19,14 +19,14 @@ public class LonLatLocator {
 
     public static LonLatZip getWithZipCode(String zipCode) {
         InputStream UsZipCodes = LonLatLocator.class.getClassLoader().getResourceAsStream("USZipCodesfrom2013GovernmentData.txt");
-        LonLatZip lonLatZip = new LonLatZip();
+        LonLatZip lonLatZip = null;
         if (UsZipCodes == null) throw new IllegalArgumentException("File not found");
         try (BufferedReader br = new BufferedReader(new InputStreamReader(UsZipCodes))) {
             String line;
             while ((line = br.readLine()) != null) {
                 String[] split = StringUtils.split(line, ",");
                 if (split[0].equals(zipCode)) {
-                    lonLatZip = new LonLatZip(split[0], split[1], split[2]);
+                    lonLatZip = LonLatZip.builder().zipCode(split[0]).latitude(split[1]).longitude(split[2]).build();
                 }
             }
         } catch (IOException e) {

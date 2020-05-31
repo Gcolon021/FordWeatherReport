@@ -26,5 +26,5 @@ Languages/Libraries:
  - This project had 1311 lines of java code pre-refactor
  
 ### Refactor - Post Code Review:
- - Migrated project to use @Data and @Builder reducing clutter and lines of code by 329. The biggest benefit of this change is reduce clutter and improve readability making future maintenance easier.
+ - Migrated project to use @Data and @Builder reducing clutter and lines of code by 360. The biggest benefit of this change is reduce clutter and improve readability making future maintenance easier.
 - 
