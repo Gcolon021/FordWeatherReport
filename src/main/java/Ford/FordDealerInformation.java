@@ -10,20 +10,23 @@ import java.util.ArrayList;
 
 public class FordDealerInformation {
 
+    private final static String fordDealershipInfoLink = "https://drive.google.com/file/d/1hITYo2o4WyrDEZeF7qDoFEnIABzO5zix/view?usp=sharing";
+    private final static String fordDealerLocationLink = "https://drive.google.com/file/d/1hOTrloqFyPaUgt8H5Lz5NAnbF0oH5856/view?usp=sharing";
+
     /*
     Both of these files are never written and for this reason they will remain as resource only files.
      */
 
     // FordDealer --> expose at endpoint somewhere so we can get data outside of jar and modify if nessecary
-    private final static URL fordDealershipInformation = FordDealerInformation.class.getClassLoader().getResource("DealerInformation.csv");
-    private final static URL fordDealerLocationInformation = FordDealerInformation.class.getClassLoader().getResource("Hartford CMT Routing V 49.csv");
+    private final static URL fordDealershipInfo = FordDealerInformation.class.getClassLoader().getResource("DealerInformation.csv");
+    private final static URL fordDealerLocations = FordDealerInformation.class.getClassLoader().getResource("Hartford CMT Routing V 49.csv");
 
     public static ArrayList<FordDealer> loadFordData() {
         ArrayList<FordDealer> fordDealers = new ArrayList<>();
-        if (fordDealershipInformation == null) throw new IllegalArgumentException();
+        if (fordDealershipInfo == null) throw new IllegalArgumentException();
         try {
             // Must have charsetName set to UTF-8 to remove ï»¿ from beginning of .csv file
-            Reader fileReader = new FileReader(fordDealershipInformation.getPath().replaceAll("%20", " "));
+            Reader fileReader = new FileReader(fordDealershipInfo.getPath().replaceAll("%20", " "));
             Iterable<CSVRecord> records = CSVFormat.RFC4180.parse(fileReader);
             for (CSVRecord record : records) {
                 FordDealer build = FordDealer.builder()
@@ -54,10 +57,10 @@ public class FordDealerInformation {
      */
     public static void appendZipCodeToDI() {
         try {
-            if (fordDealershipInformation == null || fordDealerLocationInformation == null)
+            if (fordDealershipInfo == null || fordDealerLocations == null)
                 throw new IllegalArgumentException();
-            Reader locationCSV = new FileReader(fordDealerLocationInformation.getPath().replaceAll("%20", " "));
-            Reader dealershipCSV = new FileReader(fordDealershipInformation.getPath().replaceAll("%20", " "));
+            Reader locationCSV = new FileReader(fordDealerLocations.getPath().replaceAll("%20", " "));
+            Reader dealershipCSV = new FileReader(fordDealershipInfo.getPath().replaceAll("%20", " "));
             PrintWriter writer = new PrintWriter("DealerInformation.csv", StandardCharsets.UTF_8);
 
             Iterable<CSVRecord> locInfoRecord = CSVFormat.RFC4180.parse(locationCSV);
