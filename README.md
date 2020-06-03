@@ -16,6 +16,7 @@ Languages/Libraries:
 - [Moshi](https://github.com/square/moshi/)
 - [Okhttp](https://square.github.io/okhttp/)
 - [Apache Commons](https://commons.apache.org/)
+- [Commons CSV](https://commons.apache.org/proper/commons-csv/)
 - [Lombok](https://projectlombok.org/)
 
 ### Pre-Code Review Notes:
@@ -27,4 +28,4 @@ Languages/Libraries:
  
 ### Refactor - Post Code Review:
  - Migrated project to use @Data and @Builder reducing clutter and lines of code by 360. The biggest benefit of this change is reduce clutter and improve readability making future maintenance easier.
-- 
+ - Migrated project to use [commons csv](https://commons.apache.org/proper/commons-csv/). This allowed me to remove the regular expression used to parse the data from the csv files.

@@ -1,5 +1,8 @@
 package Ford;
 
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVRecord;
+
 import java.io.*;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -12,39 +15,33 @@ public class FordDealerInformation {
      */
 
     // FordDealer --> expose at endpoint somewhere so we can get data outside of jar and modify if nessecary
-    private final static InputStream fordDealershipInformation = FordDealerInformation.class.getClassLoader().getResourceAsStream("DealerInformation.csv");
+    private final static URL fordDealershipInformation = FordDealerInformation.class.getClassLoader().getResource("DealerInformation.csv");
     private final static URL fordDealerLocationInformation = FordDealerInformation.class.getClassLoader().getResource("Hartford CMT Routing V 49.csv");
 
     public static ArrayList<FordDealer> loadFordData() {
         ArrayList<FordDealer> fordDealers = new ArrayList<>();
         if (fordDealershipInformation == null) throw new IllegalArgumentException();
-        BufferedReader br;
         try {
             // Must have charsetName set to UTF-8 to remove ï»¿ from beginning of .csv file
-            br = new BufferedReader(new InputStreamReader(fordDealershipInformation, StandardCharsets.UTF_8));
-            String line;
-            while ((line = br.readLine()) != null) {
-                String[] split = line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);
-
+            Reader fileReader = new FileReader(fordDealershipInformation.getPath().replaceAll("%20", " "));
+            Iterable<CSVRecord> records = CSVFormat.RFC4180.parse(fileReader);
+            for (CSVRecord record : records) {
                 FordDealer build = FordDealer.builder()
-                        .route(split[0])
-                        .dealerCode(split[1])
-                        .name(split[2])
-                        .city(split[3])
-                        .stateCode(split[4])
-                        .actualTime(split[5])
-                        .expectedTime(split[6])
-                        .zipCode(split[7])
+                        .route(record.get(0))
+                        .dealerCode(record.get(1))
+                        .name(record.get(2))
+                        .city(record.get(3))
+                        .stateCode(record.get(4))
+                        .actualTime(record.get(5))
+                        .expectedTime(record.get(6))
+                        .zipCode(record.get(7))
                         .build();
 
                 fordDealers.add(build);
-
             }
-        } catch (IOException e) {
 
-            // Do something more graceful here like return an empty arraylist === Fail gracefully
-            e.printStackTrace();
-
+            } catch (IOException ex) {
+            ex.printStackTrace();
         }
         return fordDealers;
     }
@@ -59,32 +56,30 @@ public class FordDealerInformation {
         try {
             if (fordDealershipInformation == null || fordDealerLocationInformation == null)
                 throw new IllegalArgumentException();
-            FileInputStream fileInputStream = new FileInputStream(String.valueOf(fordDealerLocationInformation.getFile()).replaceAll("%20", " "));
-            BufferedReader info = new BufferedReader(new InputStreamReader(fileInputStream));
-            BufferedReader br = new BufferedReader(new InputStreamReader(fordDealershipInformation, StandardCharsets.UTF_8));
-
+            Reader locationCSV = new FileReader(fordDealerLocationInformation.getPath().replaceAll("%20", " "));
+            Reader dealershipCSV = new FileReader(fordDealershipInformation.getPath().replaceAll("%20", " "));
             PrintWriter writer = new PrintWriter("DealerInformation.csv", StandardCharsets.UTF_8);
 
-            String line, temp;
-            String[] split, tSplit;
-            while ((line = br.readLine()) != null) {
-                // match on Dealer code column 2 in DealerInformation
-                split = line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);
-                while ((temp = info.readLine()) != null) {
-                    // Match on dealer code column 3 in Hartford CMT Routing V 49.csv
-                    tSplit = temp.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);
-                    if (tSplit[2].equals(split[1])) {
-                        //&& tSplit[8].equals(split[4]) && tSplit[9].equals(split[5])
+            Iterable<CSVRecord> locInfoRecord = CSVFormat.RFC4180.parse(locationCSV);
+            for (CSVRecord locInfo : locInfoRecord) {
+                Iterable<CSVRecord> dealerInfoRecord = CSVFormat.RFC4180.parse(dealershipCSV);
+                for (CSVRecord dealerInfo : dealerInfoRecord) {
+                    if (dealerInfo.get(2).equals(locInfo.get(1))){
                         System.out.println("found");
-                        writer.println(split[0] + "," + split[1] + "," + split[2] + "," + split[3] + "," + split[4] + "," + split[5] + "," + split[6] + "," + tSplit[10]);
+                        writer.println(
+                                locInfo.get(0) + ","
+                                + locInfo.get(1) + ","
+                                + locInfo.get(2) + ","
+                                + locInfo.get(3) + ","
+                                + locInfo.get(4) + ","
+                                + locInfo.get(5) + ","
+                                + locInfo.get(6) + ","
+                                + dealerInfo.get(10));
                         writer.flush();
-                        fileInputStream.getChannel().position(0);
                         break;
                     }
                 }
-
             }
-
             writer.close();
         } catch (IOException e) {
             e.printStackTrace();
